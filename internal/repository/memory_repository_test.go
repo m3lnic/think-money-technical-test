@@ -35,4 +35,21 @@ func TestMemoryRepositoryCRUDComplexType(t *testing.T) {
 	if !errors.Is(err, repository.ErrKeyAlreadyExists) {
 		t.Errorf("expected error(%+v), got error(%+v)", repository.ErrKeyAlreadyExists, err)
 	}
+
+	// > Read
+	fetchedVal, err := memoryRepository.Read(testKey)
+	if err != nil {
+		t.Errorf("expected nil, got error(%+v)", err)
+	}
+	if fetchedVal.Data != testData {
+		t.Errorf("expected string(%s), got string(%s)", testData, fetchedVal.Data)
+	}
+
+	_, err = memoryRepository.Read("invalid_key")
+	if err == nil {
+		t.Errorf("expected error(%+v), got nil", err)
+	}
+	if !errors.Is(err, repository.ErrKeyNotFound) {
+		t.Errorf("expected error(%+v), got error(%+v)", repository.ErrKeyNotFound, err)
+	}
 }

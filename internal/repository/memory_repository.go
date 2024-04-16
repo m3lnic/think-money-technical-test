@@ -26,9 +26,16 @@ func (m *MemoryRepository[K, D]) Create(key K, data D) (D, error) {
 	return data, nil
 }
 
+var ErrKeyNotFound error = errors.New("key not found")
+
 // Read implements IRepository.
-func (*MemoryRepository[K, D]) Read(K) (D, error) {
-	panic("unimplemented")
+func (m *MemoryRepository[K, D]) Read(key K) (D, error) {
+	val, found := m.repository[key]
+	if !found {
+		return *new(D), ErrKeyNotFound
+	}
+
+	return val, nil
 }
 
 // Update implements IRepository.
