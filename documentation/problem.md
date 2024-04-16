@@ -40,3 +40,4 @@ interface ICheckout
     - Services
         - Checkout
             - Should be able to scan items like: "a", "b", "a", "ccc"
+            - Pricing can be calculated when we call GetTotal
