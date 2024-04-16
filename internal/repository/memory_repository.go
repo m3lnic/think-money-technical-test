@@ -39,11 +39,24 @@ func (m *MemoryRepository[K, D]) Read(key K) (D, error) {
 }
 
 // Update implements IRepository.
-func (*MemoryRepository[K, D]) Update(K, D) (D, error) {
-	panic("unimplemented")
+func (m *MemoryRepository[K, D]) Update(key K, newData D) (D, error) {
+	_, found := m.repository[key]
+	if !found {
+		return *new(D), ErrKeyNotFound
+	}
+
+	m.repository[key] = newData
+
+	return newData, nil
 }
 
 // Delete implements IRepository.
-func (*MemoryRepository[K, D]) Delete(K) error {
-	panic("unimplemented")
+func (m *MemoryRepository[K, D]) Delete(key K) error {
+	if _, found := m.repository[key]; !found {
+		return ErrKeyNotFound
+	}
+
+	delete(m.repository, key)
+
+	return nil
 }
