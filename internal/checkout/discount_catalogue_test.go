@@ -13,19 +13,22 @@ import (
 func TestNewDiscountCatalogue(t *testing.T) {
 	t.Parallel()
 
-	myCatalogue := checkout.NewDiscountCatalogue()
+	myCatalogue := checkout.NewCatalogue()
+	myCatalogue.Create("A", checkout.NewItem("Pineapples", 20))
+
+	myDiscountCatalogue := checkout.NewDiscountCatalogue()
 
 	t.Run("creates new item", func(t *testing.T) {
-		_, err := myCatalogue.Create("A", checkout.NewDiscount(1, 2))
+		_, err := myDiscountCatalogue.Create("A", checkout.NewDiscount(1, 2))
 		assert.Nil(t, err)
 
-		_, secErr := myCatalogue.Create("A", checkout.NewDiscount(1, 2))
+		_, secErr := myDiscountCatalogue.Create("A", checkout.NewDiscount(1, 2))
 		assert.NotNil(t, secErr)
 		assert.ErrorIs(t, secErr, repository.ErrKeyAlreadyExists)
 	})
 
 	t.Run("reads new item", func(t *testing.T) {
-		fetchedVal, err := myCatalogue.Read("A")
+		fetchedVal, err := myDiscountCatalogue.Read("A")
 		assert.Nil(t, err)
 
 		expectedTotal, remaining := fetchedVal.QualifiesFor(1)
