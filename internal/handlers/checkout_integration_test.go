@@ -63,3 +63,18 @@ func TestCheckoutHandlerScan(t *testing.T) {
 		})
 	})
 }
+
+func TestCheckoutHandlerGet(t *testing.T) {
+	myEngine, _, _, _ := initializeTest()
+
+	t.Run("returns correct data", func(t *testing.T) {
+		t.Parallel()
+
+		w := httptest.NewRecorder()
+		req, _ := http.NewRequest("GET", "/checkout", nil)
+		myEngine.ServeHTTP(w, req)
+
+		assert.Equal(t, 200, w.Code)
+		assert.Equal(t, "0", w.Body.String())
+	})
+}
