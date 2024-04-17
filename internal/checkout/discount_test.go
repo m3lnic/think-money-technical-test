@@ -40,7 +40,13 @@ func TestDiscountToString(t *testing.T) {
 func TestDiscountQualifiesFor(t *testing.T) {
 	t.Parallel()
 
-	unitPrice := 50
-	item := checkout.NewItem("Pineapples", unitPrice)
-	assert.Equal(t, item.GetUnitPrice(), unitPrice)
+	discount := checkout.NewDiscount(4, 50)
+
+	discountTotal, remainingItems := discount.QualifiesFor(0)
+	assert.Equal(t, discountTotal, 0)
+	assert.Equal(t, remainingItems, 0)
+
+	discountTotal, remainingItems = discount.QualifiesFor(2)
+	assert.Equal(t, discountTotal, 0)
+	assert.Equal(t, remainingItems, 2)
 }

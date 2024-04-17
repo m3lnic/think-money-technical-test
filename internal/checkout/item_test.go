@@ -9,7 +9,7 @@ import (
 )
 
 type ItemToStringTestConfig struct {
-	Item           checkout.IItem
+	Item           checkout.Item
 	ExpectedString string
 }
 
@@ -18,11 +18,11 @@ func TestItemToString(t *testing.T) {
 
 	tests := []ItemToStringTestConfig{
 		{
-			Item:           checkout.NewItem("", 0),
+			Item:           *checkout.NewItem("", 0),
 			ExpectedString: "{\"name\":\"\",\"unitPrice\":0}",
 		},
 		{
-			Item:           checkout.NewItem("Pineapples", 50),
+			Item:           *checkout.NewItem("Pineapples", 50),
 			ExpectedString: "{\"name\":\"Pineapples\",\"unitPrice\":50}",
 		},
 	}

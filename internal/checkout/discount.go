@@ -2,9 +2,10 @@ package checkout
 
 import "encoding/json"
 
+// > Mainly used for reference
 type IDiscount interface {
-	// > Out - totalCost, remainingItems
-	QualifiesForDiscount(quantity int) (int, int)
+	// > Out - discountTotal, remainingItems
+	QualifiesFor(quantity int) (int, int)
 	ToString() string
 }
 
@@ -17,13 +18,12 @@ func NewDiscount(quantity, price int) *Discount {
 }
 
 type Discount struct {
-	IDiscount `json:"-"`
-	Quantity  int `json:"quantity"`
-	Price     int `json:"price"`
+	Quantity int `json:"quantity"`
+	Price    int `json:"price"`
 }
 
 func (i Discount) QualifiesFor(quantity int) (int, int) {
-	return 0, 0
+	return 0, quantity % i.Quantity
 }
 
 func (i Discount) ToString() string {
