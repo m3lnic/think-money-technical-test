@@ -65,9 +65,10 @@ func TestCheckoutHandlerScan(t *testing.T) {
 }
 
 func TestCheckoutHandlerGet(t *testing.T) {
-	myEngine, _, _, _ := initializeTest()
 
 	t.Run("returns correct data", func(t *testing.T) {
+		myEngine, _, _, _ := initializeTest()
+
 		t.Parallel()
 
 		w := httptest.NewRecorder()
@@ -76,5 +77,29 @@ func TestCheckoutHandlerGet(t *testing.T) {
 
 		assert.Equal(t, 200, w.Code)
 		assert.Equal(t, "0", w.Body.String())
+	})
+
+	t.Run("when item removed", func(t *testing.T) {
+		myEngine, myCatalogue, _, myCheckout := initializeTest()
+
+		t.Parallel()
+
+		myCheckout.Scan("A")
+
+		w := httptest.NewRecorder()
+		req, _ := http.NewRequest("GET", "/checkout", nil)
+		myEngine.ServeHTTP(w, req)
+
+		assert.Equal(t, 200, w.Code)
+		assert.Equal(t, "50", w.Body.String())
+
+		myCatalogue.Delete("A")
+
+		w = httptest.NewRecorder()
+		req, _ = http.NewRequest("GET", "/checkout", nil)
+		myEngine.ServeHTTP(w, req)
+
+		assert.Equal(t, 500, w.Code)
+		assert.Equal(t, handlers.NewErrorRes(handlers.ErrUnexpected).ToString(), w.Body.String())
 	})
 }
