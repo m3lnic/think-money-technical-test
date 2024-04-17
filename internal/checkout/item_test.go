@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/m3lnic/think-money-technical-test/internal/checkout"
+	"github.com/stretchr/testify/assert"
 )
 
 type ItemToStringTestConfig struct {
@@ -31,9 +32,7 @@ func TestItemToString(t *testing.T) {
 			expectedItemString := current.ExpectedString
 			itemString := current.Item.ToString()
 
-			if itemString != expectedItemString {
-				t.Errorf("expected string(%s), got string(%s)", expectedItemString, itemString)
-			}
+			assert.Equal(t, itemString, expectedItemString)
 		})
 	}
 }
@@ -43,11 +42,7 @@ func TestItemGetUnitPrice(t *testing.T) {
 
 	unitPrice := 50
 	item := checkout.NewItem("Pineapples", unitPrice)
-	priceOut := item.GetUnitPrice()
-
-	if priceOut != unitPrice {
-		t.Errorf("expected unitPrice(%d), got unitPrice(%d)", unitPrice, priceOut)
-	}
+	assert.Equal(t, item.GetUnitPrice(), unitPrice)
 }
 
 func TestItemGetName(t *testing.T) {
@@ -55,9 +50,5 @@ func TestItemGetName(t *testing.T) {
 
 	itemName := "Pineapples"
 	item := checkout.NewItem(itemName, 0)
-	nameOut := item.GetName()
-
-	if nameOut != itemName {
-		t.Errorf("expected name(%s), got name(%s)", itemName, nameOut)
-	}
+	assert.Equal(t, item.GetName(), itemName)
 }
