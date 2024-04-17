@@ -9,16 +9,18 @@ type ICheckout interface {
 	GetTotal() (int, error)
 }
 
-func New(catalogue ICatalogueRepository) ICheckout {
+func New(catalogue ICatalogueRepository, discountCatalogue IDiscountCatalogueRepository) ICheckout {
 	return &checkout{
-		catalogue:    catalogue,
-		scannedItems: repository.NewMemory[string, int](),
+		catalogue:         catalogue,
+		discountCatalogue: discountCatalogue,
+		scannedItems:      repository.NewMemory[string, int](),
 	}
 }
 
 type checkout struct {
-	catalogue    ICatalogueRepository
-	scannedItems repository.IRepository[string, int] // > SKU -> Quantity
+	catalogue         ICatalogueRepository
+	discountCatalogue IDiscountCatalogueRepository
+	scannedItems      repository.IRepository[string, int] // > SKU -> Quantity
 }
 
 // GetTotal implements ICheckout.
@@ -31,7 +33,15 @@ func (c *checkout) GetTotal() (int, error) {
 			return 0, err
 		}
 
-		curTotal += currentItemCount * catalogueItem.GetUnitPrice()
+		totalItems := currentItemCount
+		if itemDiscount, err := c.discountCatalogue.Read(sku); err == nil {
+			discountTotal, remainingItems := itemDiscount.QualifiesFor(currentItemCount)
+
+			curTotal += discountTotal
+			totalItems = remainingItems
+		}
+
+		curTotal += totalItems * catalogueItem.GetUnitPrice()
 	}
 
 	return curTotal, nil
