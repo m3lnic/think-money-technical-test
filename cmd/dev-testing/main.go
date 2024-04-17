@@ -17,7 +17,7 @@ func main() {
 	myDiscountCatalogue.Create("A", checkout.NewDiscount(3, 130))
 	myDiscountCatalogue.Create("B", checkout.NewDiscount(2, 45))
 
-	myCheckout := checkout.New(myCatalogue)
+	myCheckout := checkout.New(myCatalogue, myDiscountCatalogue)
 	myCheckout.Scan("A")
 	myCheckout.Scan("B")
 	myCheckout.Scan("A")
