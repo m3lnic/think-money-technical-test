@@ -48,4 +48,4 @@
     - [*] Test
 - [ ]
 
-- [ ] Move to using asserts for tests to clean them up and make them easier to read
+- [*] Move to using asserts for tests to clean them up and make them easier to read
