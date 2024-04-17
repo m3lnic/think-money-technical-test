@@ -1,0 +1,11 @@
+basePath: /
+host: localhost:4000
+info:
+  contact:
+    email: melody@technode.uk
+    name: Melody Nicholls
+  description: This is an example repository for the technical test of think money
+  title: ThinkMoney technical test
+  version: "1.0"
+paths: {}
+swagger: "2.0"

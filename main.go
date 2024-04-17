@@ -4,8 +4,12 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+
 	"github.com/m3lnic/think-money-technical-test/internal/checkout"
 	"github.com/m3lnic/think-money-technical-test/internal/handlers"
+	_ "github.com/m3lnic/think-money-technical-test/pkg/docs"
 )
 
 const (
@@ -13,6 +17,15 @@ const (
 	DEFAULT_PORT int    = 4000
 )
 
+// @title ThinkMoney technical test
+// @version 1.0
+// @description This is an example repository for the technical test of think money
+
+// @contact.name Melody Nicholls
+// @contact.email melody@technode.uk
+
+// @host localhost:4000
+// @BasePath /
 func main() {
 	myCatalogue := checkout.NewCatalogue()
 	myCatalogue.Create("A", checkout.NewItem("Pineapples", 50))
@@ -28,6 +41,7 @@ func main() {
 
 	r := gin.New()
 
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	handlers.NewCheckout(myCheckout).Setup(r)
 
 	if err := r.Run(fmt.Sprintf("%s:%d", DEFAULT_IP, DEFAULT_PORT)); err != nil {

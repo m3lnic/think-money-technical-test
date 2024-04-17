@@ -15,4 +15,4 @@ run_benchmarks:
 	make run_tests additionalParams=-bench=.
 
 swag_generate:
-	go run github.com/swaggo/swag/cmd/swag init -d .\cmd\$(name)\ -o ./pkg/docs/$(name) --parseDependency
+	go run github.com/swaggo/swag/cmd/swag init -o ./pkg/docs --parseDependency
