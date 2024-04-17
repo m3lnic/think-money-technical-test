@@ -8,6 +8,9 @@
     - [*] And tests
 - [ ] Create checkout service
     - [ ] And tests
+- [ ] Add discounts
+- [ ] Add discount catalogue
+    - Should be passed the item catalogue to validate that items exist
 - [ ] Implement REST API (link back to job spec)
     - [ ] Add swagger support
     - Routes:
