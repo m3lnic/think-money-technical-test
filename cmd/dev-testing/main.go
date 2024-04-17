@@ -1,6 +1,10 @@
 package main
 
-import "github.com/m3lnic/think-money-technical-test/internal/checkout"
+import (
+	"log"
+
+	"github.com/m3lnic/think-money-technical-test/internal/checkout"
+)
 
 func main() {
 	myCatalogue := checkout.NewCatalogue()
@@ -17,4 +21,15 @@ func main() {
 	myCheckout.Scan("A")
 	myCheckout.Scan("B")
 	myCheckout.Scan("A")
+	myCheckout.Scan("A")
+	myCheckout.Scan("C")
+	myCheckout.Scan("D")
+	myCheckout.Scan("B")
+
+	total, err := myCheckout.GetTotal()
+	if err != nil {
+		panic(err)
+	}
+
+	log.Printf("Total: %d", total)
 }

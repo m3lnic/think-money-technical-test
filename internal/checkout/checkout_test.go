@@ -16,6 +16,11 @@ func TestCheckoutScan(t *testing.T) {
 	// > I think it should be ok to use this as is for now
 	myCat := checkout.NewCatalogue()
 	pineapple, _ := myCat.Create("A", checkout.NewItem("Pineapples", 50))
+	// waffle, _ := myCat.Create("B", checkout.NewItem("Waffles", 30))
+	myCat.Create("B", checkout.NewItem("Waffles", 30))
+
+	myDiscountCatalogue := checkout.NewDiscountCatalogue(myCat)
+	myDiscountCatalogue.Create("A", checkout.NewDiscount(3, 130))
 
 	myCheckout := checkout.New(myCat)
 
