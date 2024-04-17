@@ -27,6 +27,15 @@ func (ch *checkoutHandler) Setup(r *gin.Engine) {
 
 var ErrSKUNotFound error = errors.New("sku not found")
 
+// Scan
+// @Summary Scan an item
+// @Description Scans an item by it's provided SKU
+// @Tags checkout
+// @Produce plain
+// @Param sku path string true "SKU"
+// @Success 200 {string} OK
+// @Failure 404 {object} ErrorRes
+// @Router /checkout/scan/{sku} [post]
 func (ch *checkoutHandler) Scan(c *gin.Context) {
 	sku := c.Params.ByName("sku")
 
@@ -38,6 +47,14 @@ func (ch *checkoutHandler) Scan(c *gin.Context) {
 	c.String(http.StatusOK, "OK")
 }
 
+// Get Total
+// @Summary Get the total of the checkout
+// @Description Returns the total value of the checkout including discounts
+// @Tags checkout
+// @Produce plain
+// @Success 200 {integer} 0
+// @Failure 404 {object} ErrorRes
+// @Router /checkout [get]
 func (ch *checkoutHandler) Get(c *gin.Context) {
 	val, err := ch.myCheckout.GetTotal()
 	if err != nil {

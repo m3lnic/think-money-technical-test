@@ -17,7 +17,79 @@ const docTemplate = `{
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
-    "paths": {}
+    "paths": {
+        "/checkout": {
+            "get": {
+                "description": "Returns the total value of the checkout including discounts",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "checkout"
+                ],
+                "summary": "Get the total of the checkout",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorRes"
+                        }
+                    }
+                }
+            }
+        },
+        "/checkout/scan/{sku}": {
+            "post": {
+                "description": "Scans an item by it's provided SKU",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "checkout"
+                ],
+                "summary": "Scan an item",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "SKU",
+                        "name": "sku",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorRes"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "handlers.ErrorRes": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it

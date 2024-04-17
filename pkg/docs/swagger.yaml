@@ -1,4 +1,10 @@
 basePath: /
+definitions:
+  handlers.ErrorRes:
+    properties:
+      message:
+        type: string
+    type: object
 host: localhost:4000
 info:
   contact:
@@ -7,5 +13,45 @@ info:
   description: This is an example repository for the technical test of think money
   title: ThinkMoney technical test
   version: "1.0"
-paths: {}
+paths:
+  /checkout:
+    get:
+      description: Returns the total value of the checkout including discounts
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorRes'
+      summary: Get the total of the checkout
+      tags:
+      - checkout
+  /checkout/scan/{sku}:
+    post:
+      description: Scans an item by it's provided SKU
+      parameters:
+      - description: SKU
+        in: path
+        name: sku
+        required: true
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorRes'
+      summary: Scan an item
+      tags:
+      - checkout
 swagger: "2.0"
