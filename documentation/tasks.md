@@ -6,10 +6,10 @@
     - [*] Create memory repository and tests
 - [*] Create catalogue repository
     - [*] And tests
-- [ ] Create checkout service
-    - [ ] And tests
-- [ ] Add discounts
-- [ ] Add discount catalogue
+- [*] Create checkout service
+    - [*] And tests
+- [*] Add discounts
+- [*] Add discount catalogue
     - Should be passed the item catalogue to validate that items exist
 - [ ] Implement REST API (link back to job spec)
     - [ ] Add swagger support
@@ -37,13 +37,15 @@
             - [ ] Get - Returns current price of checkout
             - /scan/:sku
                 - [ ] Post - Scan new item by sku
-- [ ] Decide best route for discounts
-    - [ ] Implement
-        - [ ] Seperate repository due to updates?
+- [*] Decide best route for discounts
+    - [*] Implement
+        - [*] Seperate repository due to updates?
+            - Quicker
+            - Easier to test
             - Requires putting together item + discount
         - [ ] Live on the item
             - Possible issues if discounts are being updated 🤔
-    - [ ] Test
+    - [*] Test
 - [ ]
 
 - [ ] Move to using asserts for tests to clean them up and make them easier to read

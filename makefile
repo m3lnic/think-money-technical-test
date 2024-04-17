@@ -1,6 +1,9 @@
 setup:
 	go mod download
 
+run_devtest:
+	go run ./cmd/dev-testing/main.go
+
 run_tests:
 	go test ./... $(additionalParams)
 
