@@ -16,11 +16,10 @@ func TestCheckoutScan(t *testing.T) {
 	// > I think it should be ok to use this as is for now
 	myCat := checkout.NewCatalogue()
 	pineapple, _ := myCat.Create("A", checkout.NewItem("Pineapples", 50))
-	// waffle, _ := myCat.Create("B", checkout.NewItem("Waffles", 30))
-	myCat.Create("B", checkout.NewItem("Waffles", 30))
+	waffle, _ := myCat.Create("B", checkout.NewItem("Waffles", 30))
 
 	myDiscountCatalogue := checkout.NewDiscountCatalogue(myCat)
-	myDiscountCatalogue.Create("A", checkout.NewDiscount(3, 130))
+	pineappleDiscount, _ := myDiscountCatalogue.Create("A", checkout.NewDiscount(3, 130))
 
 	myCheckout := checkout.New(myCat)
 
@@ -34,28 +33,48 @@ func TestCheckoutScan(t *testing.T) {
 		err := myCheckout.Scan("A")
 		assert.Nil(t, err)
 
+		runningTotal := 0
+
 		val, err := myCheckout.GetTotal()
 		assert.Nil(t, err)
-		assert.Equal(t, val, pineapple.GetUnitPrice())
+		runningTotal += pineapple.GetUnitPrice()
+		assert.Equal(t, val, runningTotal)
 
 		err = myCheckout.Scan("A")
 		assert.Nil(t, err)
 
 		newVal, err := myCheckout.GetTotal()
 		assert.Nil(t, err)
-		assert.Equal(t, newVal, pineapple.GetUnitPrice()*2)
+		runningTotal += pineapple.GetUnitPrice()
+		assert.Equal(t, newVal, runningTotal)
+
+		err = myCheckout.Scan("B")
+		assert.Nil(t, err)
+
+		newVal, err = myCheckout.GetTotal()
+		assert.Nil(t, err)
+		runningTotal += waffle.GetUnitPrice()
+		assert.Equal(t, newVal, runningTotal)
+
+		err = myCheckout.Scan("A")
+		assert.Nil(t, err)
+
+		newVal, err = myCheckout.GetTotal()
+		assert.Nil(t, err)
+		myNewTotal := pineappleDiscount.Price + waffle.GetUnitPrice()
+		assert.Equal(t, newVal, myNewTotal)
 	})
 
 	t.Run("errors when sku not found", func(t *testing.T) {
-		err := myCheckout.Scan("B")
+		err := myCheckout.Scan("C")
 		assert.NotNil(t, err)
 		assert.ErrorIs(t, err, repository.ErrKeyNotFound)
 	})
 
 	t.Run("when sku has been removed before getting the total", func(t *testing.T) {
-		myCat.Create("B", checkout.NewItem("Waffles", 25))
-		myCheckout.Scan("B")
-		myCat.Delete("B")
+		myCat.Create("C", checkout.NewItem("Cheesy Puffs", 25))
+		myCheckout.Scan("C")
+		myCat.Delete("C")
 
 		_, err := myCheckout.GetTotal()
 		assert.NotNil(t, err)
