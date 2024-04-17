@@ -4,6 +4,8 @@ import (
 	"testing"
 
 	"github.com/m3lnic/think-money-technical-test/internal/checkout"
+	"github.com/m3lnic/think-money-technical-test/internal/repository"
+	"github.com/stretchr/testify/assert"
 )
 
 // > Step by step test
@@ -16,21 +18,17 @@ func TestNewCatalogue(t *testing.T) {
 	myCatalogue := checkout.NewCatalogue()
 
 	t.Run("creates new item", func(t *testing.T) {
-		if _, err := myCatalogue.Create("A", checkout.NewItem(itemTestName, 50)); err != nil {
-			t.Errorf("expected nil, got error(%+v)", err)
-		}
-		if _, err := myCatalogue.Create("A", checkout.NewItem(itemTestName, 50)); err == nil {
-			t.Errorf("expected err(%+v), got nil", err)
-		}
+		_, err := myCatalogue.Create("A", checkout.NewItem(itemTestName, 50))
+		assert.Nil(t, err)
+
+		_, secErr := myCatalogue.Create("A", checkout.NewItem(itemTestName, 50))
+		assert.NotNil(t, secErr)
+		assert.ErrorIs(t, secErr, repository.ErrKeyAlreadyExists)
 	})
 
 	t.Run("reads new item", func(t *testing.T) {
 		fetchedVal, err := myCatalogue.Read("A")
-		if err != nil {
-			t.Errorf("expected nil, got error(%+v)", err)
-		}
-		if fetchedVal.GetName() != itemTestName {
-			t.Errorf("expected string(%s), got string(%s)", itemTestName, fetchedVal.GetName())
-		}
+		assert.Nil(t, err)
+		assert.Equal(t, fetchedVal.GetName(), itemTestName)
 	})
 }
