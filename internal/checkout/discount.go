@@ -1,6 +1,9 @@
 package checkout
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"math"
+)
 
 // > Mainly used for reference
 type IDiscount interface {
@@ -23,7 +26,10 @@ type Discount struct {
 }
 
 func (i Discount) QualifiesFor(quantity int) (int, int) {
-	return 0, quantity % i.Quantity
+	totalCost := int(math.Floor(float64(quantity) / float64(i.Quantity)))
+	remainingQuantity := quantity % i.Quantity
+
+	return totalCost * i.Price, remainingQuantity
 }
 
 func (i Discount) ToString() string {
