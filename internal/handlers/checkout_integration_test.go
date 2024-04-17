@@ -11,33 +11,21 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func initializeTest() (
+func initializeCheckoutTest() (
 	*gin.Engine,
 	checkout.ICatalogueRepository,
 	checkout.IDiscountCatalogueRepository,
 	checkout.ICheckout,
 ) {
-	myCatalogue := checkout.NewCatalogue()
-	myDiscountCatalogue := checkout.NewDiscountCatalogue(myCatalogue)
+	engine, cat, discoCat, checkout := CreateBaseService()
 
-	myCatalogue.Create("A", checkout.NewItem("Pineapples", 50))
-	myCatalogue.Create("B", checkout.NewItem("Waffles", 30))
-	myCatalogue.Create("C", checkout.NewItem("Bacon", 20))
-	myCatalogue.Create("D", checkout.NewItem("Maple Syrup", 15))
+	handlers.NewCheckout(checkout).Setup(engine)
 
-	myDiscountCatalogue.Create("A", checkout.NewDiscount(3, 130))
-	myDiscountCatalogue.Create("B", checkout.NewDiscount(2, 45))
-
-	myCheckout := checkout.New(myCatalogue, myDiscountCatalogue)
-
-	myEngine := gin.New()
-	handlers.NewCheckout(myCheckout).Setup(myEngine)
-
-	return myEngine, myCatalogue, myDiscountCatalogue, myCheckout
+	return engine, cat, discoCat, checkout
 }
 
 func TestCheckoutHandlerScan(t *testing.T) {
-	myEngine, _, _, _ := initializeTest()
+	myEngine, _, _, _ := initializeCheckoutTest()
 
 	t.Run("/checkout/scan/:sku", func(t *testing.T) {
 		t.Run("when sku found", func(t *testing.T) {
@@ -67,7 +55,7 @@ func TestCheckoutHandlerScan(t *testing.T) {
 func TestCheckoutHandlerGet(t *testing.T) {
 
 	t.Run("returns correct data", func(t *testing.T) {
-		myEngine, _, _, _ := initializeTest()
+		myEngine, _, _, _ := initializeCheckoutTest()
 
 		t.Parallel()
 
@@ -80,7 +68,7 @@ func TestCheckoutHandlerGet(t *testing.T) {
 	})
 
 	t.Run("when item removed", func(t *testing.T) {
-		myEngine, myCatalogue, _, myCheckout := initializeTest()
+		myEngine, myCatalogue, _, myCheckout := initializeCheckoutTest()
 
 		t.Parallel()
 
