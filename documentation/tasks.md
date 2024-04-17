@@ -4,10 +4,43 @@
     - [*] Unit tests
 - [*] Create repository interface
     - [*] Create memory repository and tests
-- [ ] Create catalogue repository
-    - [ ] And tests
+- [*] Create catalogue repository
+    - [*] And tests
 - [ ] Create checkout service
     - [ ] And tests
+- [ ] Implement REST API (link back to job spec)
+    - [ ] Add swagger support
+    - Routes:
+        - /catalogue
+            - [ ] Get - Lists catalogue
+            - /:name
+                - [ ] Post - Create new / update item
+                    - Request
+                        - Name (mandatory)
+                        - Item (optional)
+                            - UnitPrice (mandatory)
+                        - Discount (optional)
+                            - Quantity (mandatory)
+                            - Price (mandatory)
+                    - Response
+                        - ItemRes
+                            - SKU
+                            - Name
+                            - UnitPrice
+                            - Discount
+                                - Quantity
+                                - Price
+        - /checkout
+            - [ ] Get - Returns current price of checkout
+            - /scan/:sku
+                - [ ] Post - Scan new item by sku
 - [ ] Decide best route for discounts
     - [ ] Implement
+        - [ ] Seperate repository due to updates?
+            - Requires putting together item + discount
+        - [ ] Live on the item
+            - Possible issues if discounts are being updated 🤔
     - [ ] Test
+- [ ]
+
+- [ ] Move to using asserts for tests to clean them up and make them easier to read
