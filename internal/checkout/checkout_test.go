@@ -21,7 +21,7 @@ func TestCheckoutScan(t *testing.T) {
 	myDiscountCatalogue := checkout.NewDiscountCatalogue(myCat)
 	pineappleDiscount, _ := myDiscountCatalogue.Create("A", checkout.NewDiscount(3, 130))
 
-	myCheckout := checkout.New(myCat)
+	myCheckout := checkout.New(myCat, myDiscountCatalogue)
 
 	t.Run("validate total is initally 0", func(t *testing.T) {
 		val, err := myCheckout.GetTotal()
