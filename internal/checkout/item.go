@@ -2,6 +2,7 @@ package checkout
 
 import "encoding/json"
 
+// > Mainly used for reference
 type IItem interface {
 	GetName() string
 	GetUnitPrice() int

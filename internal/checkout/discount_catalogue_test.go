@@ -16,11 +16,12 @@ func TestNewDiscountCatalogue(t *testing.T) {
 	myCatalogue := checkout.NewCatalogue()
 	myCatalogue.Create("A", checkout.NewItem("Pineapples", 20))
 
-	myDiscountCatalogue := checkout.NewDiscountCatalogue()
+	myDiscountCatalogue := checkout.NewDiscountCatalogue(myCatalogue)
 
 	t.Run("creates new item", func(t *testing.T) {
-		_, err := myDiscountCatalogue.Create("A", checkout.NewDiscount(1, 2))
+		data, err := myDiscountCatalogue.Create("A", checkout.NewDiscount(1, 2))
 		assert.Nil(t, err)
+		assert.Equal(t, data.Price, 2)
 
 		_, secErr := myDiscountCatalogue.Create("A", checkout.NewDiscount(1, 2))
 		assert.NotNil(t, secErr)
@@ -34,5 +35,12 @@ func TestNewDiscountCatalogue(t *testing.T) {
 		expectedTotal, remaining := fetchedVal.QualifiesFor(1)
 		assert.Equal(t, expectedTotal, 2)
 		assert.Equal(t, remaining, 0)
+	})
+
+	t.Run("when new item doesn't exist in the catalogue", func(t *testing.T) {
+		data, err := myDiscountCatalogue.Create("B", checkout.NewDiscount(1, 2))
+		assert.Nil(t, data)
+		assert.NotNil(t, err)
+		assert.ErrorIs(t, err, repository.ErrKeyNotFound)
 	})
 }
