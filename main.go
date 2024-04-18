@@ -39,10 +39,11 @@ func main() {
 
 	myCheckout := checkout.New(myCatalogue, myDiscountCatalogue)
 
-	r := gin.New()
+	r := gin.Default()
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	handlers.NewCheckout(myCheckout).Setup(r)
+	handlers.NewDiscount(myDiscountCatalogue).Setup(r)
 
 	if err := r.Run(fmt.Sprintf("%s:%d", DEFAULT_IP, DEFAULT_PORT)); err != nil {
 		panic(err)
