@@ -42,7 +42,9 @@ The configuration for bound IP and port can be changed by opening `{project root
 ### Adding items to the catalogue
 To support additional SKUs / items / initial discount, you will need to update the `main.go` file found in the root of the project.
 - To add additional catalogue items, you can call `myCatalogue.Create(sku, checkout.NewItem(name, cost))` after myCatalogue has been created but before the line that contains `err := r.Run(...)`
+    - Please note that if you attempt to overwrite an already existing SKU using the Create function, you will receive an error
 - To add additional initial discounts, you can call `myDiscountCatalogue.Create(sku, checkout.NewDiscount(quantity, price))` after myDiscountCatalogue has been created but before the line that contains `err := r.Run(...)`
+    - Please note that if you attempt to overwrite an already existing SKU using the Create function, you will receive an error
 - To add an initial sentence that you would like to be parsed (as outlined above), you can modify the `INITIAL_PARSED_SENTENCE` const variable declared near the top of the main.go file to contain the sentence you would like to parse.
 
 
