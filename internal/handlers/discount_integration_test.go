@@ -45,7 +45,39 @@ func TestDiscountHandlerCreateOrUpdate(t *testing.T) {
 
 		myEngine, _, _, _ := initializeDiscountTest()
 
-		t.Run("when item exists", func(t *testing.T) {
+		t.Run("when catalogue item does not exist", func(t *testing.T) {
+			myBody := handlers.CreateOrUpdateDiscountReq{
+				Quantity: 10,
+				Price:    20,
+			}
+
+			ioBody, _ := json.Marshal(myBody)
+
+			w := httptest.NewRecorder()
+			req, _ := http.NewRequest("POST", "/discount/Z", bytes.NewBuffer(ioBody))
+			myEngine.ServeHTTP(w, req)
+
+			assert.Equal(t, http.StatusNotFound, w.Code)
+			assert.Equal(t, handlers.NewErrorRes(handlers.ErrSKUNotFound).ToString(), w.Body.String())
+		})
+
+		t.Run("when updated discount does not exist", func(t *testing.T) {
+			myBody := handlers.CreateOrUpdateDiscountReq{
+				Quantity: 10,
+				Price:    20,
+			}
+
+			ioBody, _ := json.Marshal(myBody)
+
+			w := httptest.NewRecorder()
+			req, _ := http.NewRequest("POST", "/discount/A", bytes.NewBuffer(ioBody))
+			myEngine.ServeHTTP(w, req)
+
+			assert.Equal(t, http.StatusOK, w.Code)
+			assert.Equal(t, "true", w.Body.String())
+		})
+
+		t.Run("when discount exists", func(t *testing.T) {
 			myBody := handlers.CreateOrUpdateDiscountReq{
 				Quantity: 10,
 				Price:    20,
