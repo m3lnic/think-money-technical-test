@@ -8,7 +8,7 @@ run_tests:
 	go test ./... $(additionalParams)
 
 run_test_coverage:
-	go test ./... -coverprofile="test_coverage.out"
+	make run_tests additionalParams=-coverprofile="test_coverage.out"
 	go tool cover -html="test_coverage.out"
 
 run_benchmarks:
