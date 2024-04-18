@@ -62,8 +62,6 @@ func TestCheckoutHandlerGet(t *testing.T) {
 
 		myEngine, _, _, _ := initializeCheckoutTest()
 
-		t.Parallel()
-
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest("GET", "/checkout", nil)
 		myEngine.ServeHTTP(w, req)
@@ -76,8 +74,6 @@ func TestCheckoutHandlerGet(t *testing.T) {
 		t.Parallel()
 
 		myEngine, myCatalogue, _, myCheckout := initializeCheckoutTest()
-
-		t.Parallel()
 
 		myCheckout.Scan("A")
 

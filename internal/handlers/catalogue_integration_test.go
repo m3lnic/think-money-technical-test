@@ -1,6 +1,8 @@
 package handlers_test
 
 import (
+	"bytes"
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -17,24 +19,51 @@ func initializeCatalogueTest() (
 	checkout.IDiscountCatalogueRepository,
 	checkout.ICheckout,
 ) {
-	engine, cat, discoCat, checkout := CreateBaseService()
+	engine, cat, discoCat, myCheckout := CreateBaseService()
 
-	handlers.NewCatalogue().Setup(engine)
+	sentenceParser := checkout.NewCatalogueSentenceParser(cat, discoCat)
+	handlers.NewCatalogue(sentenceParser).Setup(engine)
 
-	return engine, cat, discoCat, checkout
+	return engine, cat, discoCat, myCheckout
 }
 
 func TestParseBySentence(t *testing.T) {
+	t.Parallel()
+
 	myEngine, _, _, _ := initializeCatalogueTest()
 
-	t.Run("/catalogue/by-sentence", func(t *testing.T) {
-		t.Parallel()
+	t.Run("when valid", func(t *testing.T) {
+		w := httptest.NewRecorder()
+		body, _ := json.Marshal(handlers.ParseBySentenceReq{
+			Sentence: "Pineapples cost 50. 2 Pineapples cost 75.",
+		})
 
+		req, _ := http.NewRequest("POST", "/catalogue/by-sentence", bytes.NewBuffer(body))
+		myEngine.ServeHTTP(w, req)
+
+		assert.Equal(t, http.StatusOK, w.Code)
+		assert.Equal(t, "OK", w.Body.String())
+	})
+
+	t.Run("when sentence invalid", func(t *testing.T) {
+		w := httptest.NewRecorder()
+		body, _ := json.Marshal(handlers.ParseBySentenceReq{
+			Sentence: "Pineapples are 50. 2 Pineapples cost 75.",
+		})
+
+		req, _ := http.NewRequest("POST", "/catalogue/by-sentence", bytes.NewBuffer(body))
+		myEngine.ServeHTTP(w, req)
+
+		assert.Equal(t, http.StatusBadRequest, w.Code)
+		assert.Equal(t, handlers.NewErrorRes(handlers.ErrInvalidBody).ToString(), w.Body.String())
+	})
+
+	t.Run("when invalid body", func(t *testing.T) {
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest("POST", "/catalogue/by-sentence", nil)
 		myEngine.ServeHTTP(w, req)
 
-		assert.Equal(t, 200, w.Code)
-		assert.Equal(t, "OK", w.Body.String())
+		assert.Equal(t, http.StatusBadRequest, w.Code)
+		assert.Equal(t, handlers.NewErrorRes(handlers.ErrInvalidBody).ToString(), w.Body.String())
 	})
 }
