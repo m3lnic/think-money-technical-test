@@ -27,6 +27,16 @@ type CreateOrUpdateDiscountReq struct {
 	Price    int `json:"price"`
 }
 
+// Create or Update by SKU
+// @Summary Creates or Updates a discount by it's provided SKU
+// @Description Scans an item by it's provided SKU
+// @Tags discount
+// @Produce json
+// @Param sku path string true "SKU"
+// @Param body body CreateOrUpdateDiscountReq true "The data for the discount you'd like to apply"
+// @Success 200 {boolean} True
+// @Failure 404 {object} ErrorRes
+// @Router /discount/{sku} [post]
 func (dh *discountHandler) CreateOrUpdateBySKU(c *gin.Context) {
 	sku := c.Params.ByName("sku")
 
