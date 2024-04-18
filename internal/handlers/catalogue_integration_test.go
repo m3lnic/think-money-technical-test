@@ -58,6 +58,19 @@ func TestParseBySentence(t *testing.T) {
 		assert.Equal(t, handlers.NewErrorRes(handlers.ErrInvalidBody).ToString(), w.Body.String())
 	})
 
+	t.Run("when item doesn't exist in the catalogue", func(t *testing.T) {
+		w := httptest.NewRecorder()
+		body, _ := json.Marshal(handlers.ParseBySentenceReq{
+			Sentence: "Chicken cost 50. 2 Pineapples cost 75.",
+		})
+
+		req, _ := http.NewRequest("POST", "/catalogue/by-sentence", bytes.NewBuffer(body))
+		myEngine.ServeHTTP(w, req)
+
+		assert.Equal(t, http.StatusNotFound, w.Code)
+		assert.Equal(t, handlers.NewErrorRes(handlers.ErrSKUNotFound).ToString(), w.Body.String())
+	})
+
 	t.Run("when invalid body", func(t *testing.T) {
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest("POST", "/catalogue/by-sentence", nil)
