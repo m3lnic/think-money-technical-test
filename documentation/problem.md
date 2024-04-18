@@ -25,15 +25,6 @@ interface ICheckout
 ## Breakdown
 - Core system
     - REST API (?)
-    - Core data models
-        - Item
-            - SKU
-            - Name
-            - Unit Price
-        - Discount
-            - SKU
-            - Quantity
-            - Price
     - Data "repositories"
         - Catalogue - Stores all valid items + SKU
         - Discount (?) - Stores discount for given SKU - Could also live on the item in catalogue

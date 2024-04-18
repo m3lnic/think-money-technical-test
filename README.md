@@ -49,3 +49,14 @@ To support additional SKUs / items / initial discount, you will need to update t
 ## Installed packages
 - [testify](https://github.com/stretchr/testify)
 - [gin](github.com/gin-gonic/gin)
+
+## Final notes
+- Why isn't there a use of channels?
+    - There wasn't a massive need for them
+    - They add complexity to testing, due to the short time deadline an MVP is better than nothing. This can be included later.
+- Are there any examples of goroutines?
+    - There is an example of goroutines used in the repository bench mark test
+- Why does the memory repository only have a mutex for when data is updated?
+    - We want to block the system from updating the same "row" at the same time, as otherwise data could be corrupted. This way, reading will always be faster than writing, but we guarentee data integrity.
+- I wasn't sure how to pick apart `Implement the code for a checkout system that handles pricing schemes such as "pineapples cost 50, three pineapples cost 130."`
+    - After much deliberation I determined that currently I don't know how I would implement the sentence parser to match `{ any number of numbers in word form } { item name } cost { item cost }`. As such, I simplified the problem to allow us to create a solution that will work moving forwards, whilst also providing us with a way to implement this solution at a later date.
