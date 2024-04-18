@@ -47,6 +47,12 @@ To support additional SKUs / items / initial discount, you will need to update t
 - [testify](https://github.com/stretchr/testify)
 - [gin](github.com/gin-gonic/gin)
 
+## Github Actions / CI/CD
+There is a very simple github actions pipeline that was created at the completion of the MVP for this task. 
+
+![Build and Test workflow state](https://github.com/m3lnic/think-money-technical-test/actions/workflows/build-and-test.yml/badge.svg)
+[Build and Test](https://github.com/m3lnic/think-money-technical-test/actions/workflows/build-and-test.yml)
+
 ## Final notes
 - Why isn't there a use of channels?
     - There wasn't a massive need for them
