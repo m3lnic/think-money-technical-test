@@ -48,7 +48,7 @@ To support additional SKUs / items / initial discount, you will need to update t
 - [gin](github.com/gin-gonic/gin)
 
 ## Github Actions / CI/CD
-There is a very simple github actions pipeline that was created at the completion of the MVP for this task. 
+There is a very simple github actions pipeline that was created at the completion of the MVP for this task. It wasn't outlined in the job spec, however it provide an easy way to validate that the tests are passing. Additionally, due to how the the pipeline is created, we can validate that this application builds for a variety of different golang versions.
 
 ![Build and Test workflow state](https://github.com/m3lnic/think-money-technical-test/actions/workflows/build-and-test.yml/badge.svg)
 
