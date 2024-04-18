@@ -2,9 +2,9 @@ package checkout
 
 import (
 	"errors"
-	"log"
 	"regexp"
 	"strconv"
+	"strings"
 )
 
 var ErrInvalidInput error = errors.New("invalid input")
@@ -50,11 +50,68 @@ type catalogueSentenceParser struct {
 	discountCatalogue IDiscountCatalogueRepository
 }
 
+type TempParsedData struct {
+	Name     string
+	Price    int
+	Quantity int
+}
+
+func (csp *catalogueSentenceParser) processParsedData(data TempParsedData) error {
+	sku, _, err := csp.catalogue.GetByItemName(data.Name)
+	if err != nil {
+		return err
+	}
+
+	// > Item
+	if data.Quantity == 0 {
+		csp.catalogue.Update(sku, NewItem(data.Name, data.Price))
+		return nil
+	}
+
+	// > Discount
+	newDiscount := NewDiscount(data.Quantity, data.Price)
+	if _, err := csp.discountCatalogue.Read(sku); err == nil {
+		// > We could update the fetched discount struct and pass that
+		// > But this is faster
+		// > Bad for GC though
+		csp.discountCatalogue.Update(sku, newDiscount)
+		return nil
+	}
+
+	csp.discountCatalogue.Create(sku, newDiscount)
+
+	return nil
+}
+
 // Parse implements ICatalogueSentenceParser.
-func (*catalogueSentenceParser) Parse(sentence string) error {
+func (csp *catalogueSentenceParser) Parse(sentence string) error {
 	re := regexp.MustCompile(`[,.]+`)
-	sentences := re.Split(sentence, 0)
-	log.Printf("%+v", sentences)
+	sentences := re.Split(sentence, -1)
+
+	toProcess := make([]TempParsedData, 0)
+	for _, current := range sentences {
+		cleaned := strings.TrimSpace(current)
+		if cleaned == "" {
+			continue
+		}
+
+		name, price, quantity, err := ParseCatalogueItemOrDiscountFromSentence(cleaned)
+		if err != nil {
+			return err
+		}
+
+		toProcess = append(toProcess, TempParsedData{
+			Name:     name,
+			Price:    price,
+			Quantity: quantity,
+		})
+	}
+
+	for _, current := range toProcess {
+		if err := csp.processParsedData(current); err != nil {
+			return err
+		}
+	}
 
 	return nil
 }
