@@ -60,3 +60,7 @@ To support additional SKUs / items / initial discount, you will need to update t
     - We want to block the system from updating the same "row" at the same time, as otherwise data could be corrupted. This way, reading will always be faster than writing, but we guarentee data integrity.
 - I wasn't sure how to pick apart `Implement the code for a checkout system that handles pricing schemes such as "pineapples cost 50, three pineapples cost 130."`
     - After much deliberation I determined that currently I don't know how I would implement the sentence parser to match `{ any number of numbers in word form } { item name } cost { item cost }`. As such, I simplified the problem to allow us to create a solution that will work moving forwards, whilst also providing us with a way to implement this solution at a later date.
+- Why was everything developed on 1 branch?
+    - As I was working on this by myself, 1 branch is all that was needed. With additional people working alongside me I would have created a skeleton repository first and then would have done small individual changes on a separate branch.
+- Why didn't I use mocks for testing?
+    - Currently the tests are not written using the best of practices, however as all the components are using a memory store, as this is what the mocks would have most likely utilize, there aren't many issues using it. However, if we were utilizing Postgres, MongoDB or other distributed data store, it would be best to mock the return values of these results (preventing uneccesary calls to an actual database).
