@@ -13,8 +13,9 @@ import (
 )
 
 const (
-	DEFAULT_IP   string = "0.0.0.0"
-	DEFAULT_PORT int    = 4000
+	INITIAL_PARSED_SENTENCE string = ""
+	DEFAULT_IP              string = "0.0.0.0"
+	DEFAULT_PORT            int    = 4000
 )
 
 // @title ThinkMoney technical test
@@ -39,6 +40,12 @@ func main() {
 
 	myCheckout := checkout.New(myCatalogue, myDiscountCatalogue)
 	myCatalogueSentenceParser := checkout.NewCatalogueSentenceParser(myCatalogue, myDiscountCatalogue)
+
+	if INITIAL_PARSED_SENTENCE != "" {
+		if err := myCatalogueSentenceParser.Parse(INITIAL_PARSED_SENTENCE); err != nil {
+			panic(err)
+		}
+	}
 
 	r := gin.Default()
 
