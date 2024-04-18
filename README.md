@@ -10,7 +10,7 @@ Either run the following commands:
 Please note, if you don't have `make` installed, you can open the makefile to find the relevant commands that need to be ran. 
 
 | Command | Description | Flags |
-| --- | --- |
+| --- | --- | --- |
 | `make setup` | Installs all dependencies for the code | |
 | `make run` | Runs a provided main file | path=`{path to main file}` |
 | `make run_rest_api` | Runs the wired up rest API in {project root}/main.go | |
