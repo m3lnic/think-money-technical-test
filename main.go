@@ -38,12 +38,14 @@ func main() {
 	myDiscountCatalogue.Create("B", checkout.NewDiscount(2, 45))
 
 	myCheckout := checkout.New(myCatalogue, myDiscountCatalogue)
+	myCatalogueSentenceParser := checkout.NewCatalogueSentenceParser(myCatalogue, myDiscountCatalogue)
 
 	r := gin.Default()
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	handlers.NewCheckout(myCheckout).Setup(r)
 	handlers.NewDiscount(myDiscountCatalogue).Setup(r)
+	handlers.NewCatalogue(myCatalogueSentenceParser).Setup(r)
 
 	if err := r.Run(fmt.Sprintf("%s:%d", DEFAULT_IP, DEFAULT_PORT)); err != nil {
 		panic(err)
