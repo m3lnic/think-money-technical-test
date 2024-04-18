@@ -12,6 +12,7 @@ type IHandler interface {
 }
 
 var ErrUnexpected error = errors.New("unexpected error ocurred")
+var ErrInvalidBody error = errors.New("invalid body")
 
 func NewErrorRes(err error) ErrorRes {
 	return ErrorRes{
