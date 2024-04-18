@@ -1,5 +1,12 @@
 basePath: /
 definitions:
+  handlers.CreateOrUpdateDiscountReq:
+    properties:
+      price:
+        type: integer
+      quantity:
+        type: integer
+    type: object
   handlers.ErrorRes:
     properties:
       message:
@@ -54,4 +61,33 @@ paths:
       summary: Scan an item
       tags:
       - checkout
+  /discount/{sku}:
+    post:
+      description: Scans an item by it's provided SKU
+      parameters:
+      - description: SKU
+        in: path
+        name: sku
+        required: true
+        type: string
+      - description: The data for the discount you'd like to apply
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.CreateOrUpdateDiscountReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorRes'
+      summary: Creates or Updates a discount by it's provided SKU
+      tags:
+      - discount
 swagger: "2.0"

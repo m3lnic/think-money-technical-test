@@ -72,9 +72,64 @@
                     }
                 }
             }
+        },
+        "/discount/{sku}": {
+            "post": {
+                "description": "Scans an item by it's provided SKU",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "discount"
+                ],
+                "summary": "Creates or Updates a discount by it's provided SKU",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "SKU",
+                        "name": "sku",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "The data for the discount you'd like to apply",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handlers.CreateOrUpdateDiscountReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorRes"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "handlers.CreateOrUpdateDiscountReq": {
+            "type": "object",
+            "properties": {
+                "price": {
+                    "type": "integer"
+                },
+                "quantity": {
+                    "type": "integer"
+                }
+            }
+        },
         "handlers.ErrorRes": {
             "type": "object",
             "properties": {
