@@ -32,3 +32,17 @@ func TestNewCatalogue(t *testing.T) {
 		assert.Equal(t, fetchedVal.GetName(), itemTestName)
 	})
 }
+
+func TestGetByItemName(t *testing.T) {
+	itemName := "Test"
+	myCatalogue := checkout.NewCatalogue()
+	myCatalogue.Create("A", checkout.NewItem(itemName, 0))
+
+	_, _, err := myCatalogue.GetByItemName("NotTest")
+	assert.ErrorIs(t, err, repository.ErrKeyNotFound)
+
+	sku, item, err := myCatalogue.GetByItemName(itemName)
+	assert.Nil(t, err)
+	assert.Equal(t, "A", sku)
+	assert.Equal(t, itemName, item.GetName())
+}
