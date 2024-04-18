@@ -22,18 +22,18 @@ Please note, if you don't have `make` installed, you can open the makefile to fi
 
 ### Running the REST API
 To run the REST API you need to:
-    - Run `make setup`
-    - Run `make run_rest_api`
-    - Wait for the API to start
-    - Navigate to [the swagger homepage](http://localhost:4000/swagger/index.html)
-    - Utilize the various endpoints to:
-        - Scan items into the checkout
-        - Update discounts
-        - Create items based on sentences in the format `{ optional[int] - quantity for discount } { [string] - name of item } cost { [int] - cost of discount or single item }`. These can also be stacked by seperating them with ',' or '.'. (Please note that this only works with items already registered), Some examples are:
-            - Pineapples cost 50, Waffles cost 30.
-            - 2 Pineapples cost 75.
-            - Bacon cost 10, 3 Bacon cost 25. Waffles cost 2, 2 Waffles cost 3, Pineapples cost 75.
-        - Retrieve the total of the checkout
+- Run `make setup`
+- Run `make run_rest_api`
+- Wait for the API to start
+- Navigate to [the swagger homepage](http://localhost:4000/swagger/index.html)
+- Utilize the various endpoints to:
+    - Scan items into the checkout
+    - Update discounts
+    - Create items based on sentences in the format `{ optional[int] - quantity for discount } { [string] - name of item } cost { [int] - cost of discount or single item }`. These can also be stacked by seperating them with ',' or '.'. (Please note that this only works with items already registered), Some examples are:
+        - Pineapples cost 50, Waffles cost 30.
+        - 2 Pineapples cost 75.
+        - Bacon cost 10, 3 Bacon cost 25. Waffles cost 2, 2 Waffles cost 3, Pineapples cost 75.
+    - Retrieve the total of the checkout
 
 The configuration for bound IP and port can be changed by opening `{project root}/main.go` and updating the following const variables located near the top of the file:
 - DEFAULT_IP - The standard IP to bind to on the system (currently defaulted to "0.0.0.0" - aka, every IP address)
@@ -41,9 +41,9 @@ The configuration for bound IP and port can be changed by opening `{project root
 
 ### Adding items to the catalogue
 To support additional SKUs / items / initial discount, you will need to update the `main.go` file found in the root of the project.
-    - To add additional catalogue items, you can call `myCatalogue.Create(sku, checkout.NewItem(name, cost))` after myCatalogue has been created but before the line that contains `err := r.Run(...)`
-    - To add additional initial discounts, you can call `myDiscountCatalogue.Create(sku, checkout.NewDiscount(quantity, price))` after myDiscountCatalogue has been created but before the line that contains `err := r.Run(...)`
-    - To add an initial sentence that you would like to be parsed (as outlined above), you can modify the `INITIAL_PARSED_SENTENCE` const variable declared near the top of the main.go file to contain the sentence you would like to parse.
+- To add additional catalogue items, you can call `myCatalogue.Create(sku, checkout.NewItem(name, cost))` after myCatalogue has been created but before the line that contains `err := r.Run(...)`
+- To add additional initial discounts, you can call `myDiscountCatalogue.Create(sku, checkout.NewDiscount(quantity, price))` after myDiscountCatalogue has been created but before the line that contains `err := r.Run(...)`
+- To add an initial sentence that you would like to be parsed (as outlined above), you can modify the `INITIAL_PARSED_SENTENCE` const variable declared near the top of the main.go file to contain the sentence you would like to parse.
 
 
 ## Installed packages
