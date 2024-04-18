@@ -28,12 +28,22 @@ type CreateOrUpdateDiscountReq struct {
 }
 
 func (dh *discountHandler) CreateOrUpdateBySKU(c *gin.Context) {
-	// sku := c.Params.ByName("sku")
+	sku := c.Params.ByName("sku")
 
 	var body CreateOrUpdateDiscountReq
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, NewErrorRes(ErrInvalidBody))
 		return
+	}
+
+	updateOrCreateVal := checkout.NewDiscount(body.Quantity, body.Price)
+	if _, err := dh.discountCatalogue.Read(sku); err == nil {
+		dh.discountCatalogue.Update(sku, updateOrCreateVal)
+	} else {
+		if _, err := dh.discountCatalogue.Create(sku, updateOrCreateVal); err != nil {
+			c.JSON(http.StatusNotFound, NewErrorRes(ErrSKUNotFound))
+			return
+		}
 	}
 
 	c.JSON(http.StatusOK, true) // > Will convert true to string
