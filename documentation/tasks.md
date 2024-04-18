@@ -11,30 +11,15 @@
 - [*] Add discounts
 - [*] Add discount catalogue
     - Should be passed the item catalogue to validate that items exist
-- [ ] Implement REST API (link back to job spec)
-    - [ ] Add swagger support
+- [*] Implement REST API (link back to job spec)
+    - [*] Add swagger support
     - Routes:
         - /discounts/:sku
             - [*] Post - Creates or updates a discount
         - /catalogue
-            - [ ] Get - Lists catalogue
-            - /:name
-                - [ ] Post - Create new / update item
-                    - Request
-                        - Name (mandatory)
-                        - Item (optional)
-                            - UnitPrice (mandatory)
-                        - Discount (optional)
-                            - Quantity (mandatory)
-                            - Price (mandatory)
-                    - Response
-                        - ItemRes
-                            - SKU
-                            - Name
-                            - UnitPrice
-                            - Discount
-                                - Quantity
-                                - Price
+            - [*] Get - Lists catalogue
+            - /by-sentence
+                - [*] Post - Updates the catalogue based on a provided sentence
         - /checkout
             - [*] Get - Returns current price of checkout
             - /scan/:sku
@@ -48,9 +33,7 @@
         - [ ] Live on the item
             - Possible issues if discounts are being updated 🤔
     - [*] Test
-- [ ]
-
 - [*] Move to using asserts for tests to clean them up and make them easier to read
-- [ ] Create input parser for sentences
+- [*] Create input parser for sentences
     - Use regex
         - Split by "." and ","
