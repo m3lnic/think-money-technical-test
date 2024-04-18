@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/m3lnic/think-money-technical-test/internal/checkout"
+	"github.com/m3lnic/think-money-technical-test/internal/repository"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -45,7 +46,41 @@ func TestCatalogueSentenceParser(t *testing.T) {
 
 	catalogueSentenceParser := checkout.NewCatalogueSentenceParser(catalogue, discountCatalogue)
 
-	inputSentence := "Pineapples cost 80, Pineapples are 5 for 200. Waffles cost 100, Loaf of Bread cost 25. 2 Loaf of Bread cost 40."
-	err := catalogueSentenceParser.Parse(inputSentence)
-	assert.Nil(t, err)
+	t.Run("when sentence valid", func(t *testing.T) {
+		inputSentence := "Pineapples cost 80, 200 Pineapples cost 5. Waffles cost 100, Loaf of Bread cost 25. 2 Loaf of Bread cost 40."
+		err := catalogueSentenceParser.Parse(inputSentence)
+		assert.Nil(t, err)
+	})
+
+	t.Run("when sentence invalid", func(t *testing.T) {
+		inputSentence := "Pineapples cost 80, 200 Pineapples are 5. Waffles cost 100, Loaf of Bread cost 25. 2 Loaf of Bread cost 40."
+		err := catalogueSentenceParser.Parse(inputSentence)
+		assert.ErrorIs(t, err, checkout.ErrInvalidInput)
+
+		pineapple, err := catalogue.Read("A")
+		assert.Nil(t, err)
+		assert.Equal(t, 80, pineapple.GetUnitPrice())
+
+		waffles, err := catalogue.Read("B")
+		assert.Nil(t, err)
+		assert.Equal(t, 100, waffles.GetUnitPrice())
+
+		loafOfBread, err := catalogue.Read("C")
+		assert.Nil(t, err)
+		assert.Equal(t, 25, loafOfBread.GetUnitPrice())
+
+		pineappleDiscount, err := discountCatalogue.Read("A")
+		assert.Nil(t, err)
+		assert.Equal(t, 5, pineappleDiscount.Price)
+		assert.Equal(t, 200, pineappleDiscount.Quantity)
+
+		_, err = discountCatalogue.Read("B")
+		assert.NotNil(t, err)
+		assert.ErrorIs(t, err, repository.ErrKeyNotFound)
+
+		loafOfBreadDiscount, err := discountCatalogue.Read("C")
+		assert.Nil(t, err)
+		assert.Equal(t, 40, loafOfBreadDiscount.Price)
+		assert.Equal(t, 2, loafOfBreadDiscount.Quantity)
+	})
 }
