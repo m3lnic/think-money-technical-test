@@ -7,13 +7,45 @@ Either run the following commands:
 - Automatic: `make setup`
 
 ## Usage
+Please note, if you don't have `make` installed, you can open the makefile to find the relevant commands that need to be ran. 
+
 | Command | Description | Flags |
 | --- | --- |
 | `make setup` | Installs all dependencies for the code | |
-| `make run_tests` | Runs all tests within the code repository | |
+| `make run` | Runs a provided main file | path=`{path to main file}` |
+| `make run_rest_api` | Runs the wired up rest API in {project root}/main.go | |
+| `make run_devtest` | Runs the dev test tool within cli/* | |
+| `make run_tests` | Runs all tests within the code repository | additionalParams=`{ any golang 'go run' parameter}` |
 | `make run_test_coverage` | Runs all tests, creates test_coverage.out in the root of the project, opens your browser of choice with results of coverage | |
 | `make run_benchmarks` | Runs defined benchmarks | |
-| `make swag_generate` | Generates the swagger files for the passed main file (relational to cmd/...) | |
+| `make swag_generate` | Generates the swagger files for the passed main file | |
+
+### Running the REST API
+To run the REST API you need to:
+    - Run `make setup`
+    - Run `make run_rest_api`
+    - Wait for the API to start
+    - Navigate to [the swagger homepage](http://localhost:4000/swagger/index.html)
+    - Utilize the various endpoints to:
+        - Scan items into the checkout
+        - Update discounts
+        - Create items based on sentences in the format `{ optional[int] - quantity for discount } { [string] - name of item } cost { [int] - cost of discount or single item }`. These can also be stacked by seperating them with ',' or '.'. (Please note that this only works with items already registered), Some examples are:
+            - Pineapples cost 50, Waffles cost 30.
+            - 2 Pineapples cost 75.
+            - Bacon cost 10, 3 Bacon cost 25. Waffles cost 2, 2 Waffles cost 3, Pineapples cost 75.
+        - Retrieve the total of the checkout
+
+The configuration for bound IP and port can be changed by opening `{project root}/main.go` and updating the following const variables located near the top of the file:
+- DEFAULT_IP - The standard IP to bind to on the system (currently defaulted to "0.0.0.0" - aka, every IP address)
+- DEFAULT_PORT - The port to bind to on the system (currently defaulted to 4000)
+
+### Adding items to the catalogue
+To support additional SKUs / items / initial discount, you will need to update the `main.go` file found in the root of the project.
+    - To add additional catalogue items, you can call `myCatalogue.Create(sku, checkout.NewItem(name, cost))` after myCatalogue has been created but before the line that contains `err := r.Run(...)`
+    - To add additional initial discounts, you can call `myDiscountCatalogue.Create(sku, checkout.NewDiscount(quantity, price))` after myDiscountCatalogue has been created but before the line that contains `err := r.Run(...)`
+    - To add an initial sentence that you would like to be parsed (as outlined above), you can modify the `INITIAL_PARSED_SENTENCE` const variable declared near the top of the main.go file to contain the sentence you would like to parse.
+
 
 ## Installed packages
 - [testify](https://github.com/stretchr/testify)
+- [gin](github.com/gin-gonic/gin)
