@@ -29,7 +29,7 @@ type CreateOrUpdateDiscountReq struct {
 
 // Create or Update by SKU
 // @Summary Creates or Updates a discount by it's provided SKU
-// @Description Scans an item by it's provided SKU
+// @Description Creates or updates a discount by it's SKU
 // @Tags discount
 // @Produce json
 // @Param sku path string true "SKU"
