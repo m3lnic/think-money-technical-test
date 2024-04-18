@@ -14,6 +14,8 @@
 - [ ] Implement REST API (link back to job spec)
     - [ ] Add swagger support
     - Routes:
+        - /discounts/:sku
+            - [*] Post - Creates or updates a discount
         - /catalogue
             - [ ] Get - Lists catalogue
             - /:name
@@ -34,9 +36,9 @@
                                 - Quantity
                                 - Price
         - /checkout
-            - [ ] Get - Returns current price of checkout
+            - [*] Get - Returns current price of checkout
             - /scan/:sku
-                - [ ] Post - Scan new item by sku
+                - [*] Post - Scan new item by sku
 - [*] Decide best route for discounts
     - [*] Implement
         - [*] Seperate repository due to updates?
@@ -49,3 +51,6 @@
 - [ ]
 
 - [*] Move to using asserts for tests to clean them up and make them easier to read
+- [ ] Create input parser for sentences
+    - Use regex
+        - Split by "." and ","
