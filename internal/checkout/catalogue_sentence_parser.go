@@ -2,6 +2,7 @@ package checkout
 
 import (
 	"errors"
+	"log"
 	"regexp"
 	"strconv"
 )
@@ -31,4 +32,29 @@ func ParseCatalogueItemOrDiscountFromSentence(sentence string) (string, int, int
 	cost, _ := strconv.ParseInt(matches[3], 10, 64)
 
 	return matches[2], int(cost), quantity, nil
+}
+
+type ICatalogueSentenceParser interface {
+	Parse(string) error
+}
+
+func NewCatalogueSentenceParser(catalogue ICatalogueRepository, discountCatalogue IDiscountCatalogueRepository) ICatalogueSentenceParser {
+	return &catalogueSentenceParser{
+		catalogue:         catalogue,
+		discountCatalogue: discountCatalogue,
+	}
+}
+
+type catalogueSentenceParser struct {
+	catalogue         ICatalogueRepository
+	discountCatalogue IDiscountCatalogueRepository
+}
+
+// Parse implements ICatalogueSentenceParser.
+func (*catalogueSentenceParser) Parse(sentence string) error {
+	re := regexp.MustCompile(`[,.]+`)
+	sentences := re.Split(sentence, 0)
+	log.Printf("%+v", sentences)
+
+	return nil
 }
