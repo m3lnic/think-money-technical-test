@@ -52,6 +52,13 @@ func TestCatalogueSentenceParser(t *testing.T) {
 		assert.Nil(t, err)
 	})
 
+	t.Run("when item not found", func(t *testing.T) {
+		inputSentence := "Bacon cost 40"
+		err := catalogueSentenceParser.Parse(inputSentence)
+		assert.NotNil(t, err)
+		assert.ErrorIs(t, err, repository.ErrKeyNotFound)
+	})
+
 	t.Run("when sentence invalid", func(t *testing.T) {
 		inputSentence := "Pineapples cost 80, 200 Pineapples are 5. Waffles cost 100, Loaf of Bread cost 25. 2 Loaf of Bread cost 40."
 		err := catalogueSentenceParser.Parse(inputSentence)
