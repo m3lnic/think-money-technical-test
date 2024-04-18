@@ -1,8 +1,14 @@
 setup:
 	go mod download
 
+run:
+	go run $(path)
+
+run_rest_api:
+	make run path=./main.go
+
 run_devtest:
-	go run ./cmd/dev-testing/main.go
+	make run path=./cmd/dev-testing/main.go
 
 run_tests:
 	go test ./... $(additionalParams)
