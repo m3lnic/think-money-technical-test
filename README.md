@@ -1,5 +1,5 @@
 # think-money-technical-test
-![build and test workflow](https://github.com/m3lnic/think-money-technical-test/actions/workflows/go.yml/badge.svg)
+![build and test workflow](https://github.com/m3lnic/think-money-technical-test/actions/workflows/build-annd-test.yml/badge.svg)
 
 ## Usage
 Please note, if you don't have `make` installed, you can open the makefile to find the relevant commands that need to be ran. 
