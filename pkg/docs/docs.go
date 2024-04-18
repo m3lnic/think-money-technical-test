@@ -18,6 +18,49 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/catalogue/by-sentence": {
+            "post": {
+                "description": "Creates or Updates the discount and item catalogues based on the provided sentence.\\nThe sentence format is as follows: '{ optional[int] - quantity for discount } { [string] - name of item } cost { cost of item / discount }' - you can have multiple of these sentences separated by ',' or '.'",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "catalogue"
+                ],
+                "summary": "Creates or Updates the discount and item catalogues based on the provided sentence.",
+                "parameters": [
+                    {
+                        "description": "The sentence you'd like to parse",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ParseBySentenceReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorRes"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorRes"
+                        }
+                    }
+                }
+            }
+        },
         "/checkout": {
             "get": {
                 "description": "Returns the total value of the checkout including discounts",
@@ -81,7 +124,7 @@ const docTemplate = `{
         },
         "/discount/{sku}": {
             "post": {
-                "description": "Scans an item by it's provided SKU",
+                "description": "Creates or updates a discount by it's SKU",
                 "produces": [
                     "application/json"
                 ],
@@ -140,6 +183,14 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "handlers.ParseBySentenceReq": {
+            "type": "object",
+            "properties": {
+                "sentence": {
                     "type": "string"
                 }
             }

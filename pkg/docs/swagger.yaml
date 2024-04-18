@@ -12,6 +12,11 @@ definitions:
       message:
         type: string
     type: object
+  handlers.ParseBySentenceReq:
+    properties:
+      sentence:
+        type: string
+    type: object
 host: localhost:4000
 info:
   contact:
@@ -21,6 +26,39 @@ info:
   title: ThinkMoney technical test
   version: "1.0"
 paths:
+  /catalogue/by-sentence:
+    post:
+      description: 'Creates or Updates the discount and item catalogues based on the
+        provided sentence.\nThe sentence format is as follows: ''{ optional[int] -
+        quantity for discount } { [string] - name of item } cost { cost of item /
+        discount }'' - you can have multiple of these sentences separated by '',''
+        or ''.'''
+      parameters:
+      - description: The sentence you'd like to parse
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.ParseBySentenceReq'
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorRes'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorRes'
+      summary: Creates or Updates the discount and item catalogues based on the provided
+        sentence.
+      tags:
+      - catalogue
   /checkout:
     get:
       description: Returns the total value of the checkout including discounts
@@ -63,7 +101,7 @@ paths:
       - checkout
   /discount/{sku}:
     post:
-      description: Scans an item by it's provided SKU
+      description: Creates or updates a discount by it's SKU
       parameters:
       - description: SKU
         in: path
