@@ -25,6 +25,8 @@ func initializeCheckoutTest() (
 }
 
 func TestCheckoutHandlerScan(t *testing.T) {
+	t.Parallel()
+
 	myEngine, _, _, _ := initializeCheckoutTest()
 
 	t.Run("/checkout/scan/:sku", func(t *testing.T) {
@@ -53,8 +55,11 @@ func TestCheckoutHandlerScan(t *testing.T) {
 }
 
 func TestCheckoutHandlerGet(t *testing.T) {
+	t.Parallel()
 
 	t.Run("returns correct data", func(t *testing.T) {
+		t.Parallel()
+
 		myEngine, _, _, _ := initializeCheckoutTest()
 
 		t.Parallel()
@@ -68,6 +73,8 @@ func TestCheckoutHandlerGet(t *testing.T) {
 	})
 
 	t.Run("when item removed", func(t *testing.T) {
+		t.Parallel()
+
 		myEngine, myCatalogue, _, myCheckout := initializeCheckoutTest()
 
 		t.Parallel()
